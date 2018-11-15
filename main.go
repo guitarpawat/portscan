@@ -1,7 +1,10 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"github.com/guitarpawat/portscan/scanner"
+)
 
-func main()  {
-	fmt.Println("Hello world")
+func main() {
+	fmt.Println(scanner.NSLookUp("localhost"))
 }
