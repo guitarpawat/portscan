@@ -16,3 +16,10 @@ func TestNSLookUp(t *testing.T) {
 		t.Errorf("expected ipv4: %s, but get %s", expectedv6, v6)
 	}
 }
+
+func TestNSLookUp_Malformed(t *testing.T) {
+	_, _, err := NSLookUp("some random string")
+	if err == nil {
+		t.Fatalf("expected error")
+	}
+}
