@@ -6,5 +6,8 @@ import (
 )
 
 func main() {
-	fmt.Println(scanner.NSLookUp("localhost"))
+	ipv4, _, _ := scanner.NSLookUp("www.google.com")
+	fmt.Println(scanner.GetOpenPorts(ipv4, 80, 443))
+	ipv6, _, _ := scanner.NSLookUp("www.google.com")
+	fmt.Println(scanner.GetOpenPorts(ipv6, 80, 443))
 }
