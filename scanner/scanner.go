@@ -11,7 +11,7 @@ import (
 
 const timeout = time.Millisecond * 500
 
-// NSLookUP provides a IP lookup for specified host,
+// NSLookUp provides a IP lookup for specified host,
 // returns IPv4 and IPv6 strings (if have).
 func NSLookUp(host string) (ipv4, ipv6 string, err error) {
 	ips, err := net.LookupIP(host)
