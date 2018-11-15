@@ -26,7 +26,7 @@ func NSLookUp(host string) (ipv4, ipv6 string, err error) {
 		}
 		v6 := v.To16()
 		if v6 != nil && len(ipv6) == 0 {
-			ipv6 = "["+v.String()+"]"
+			ipv6 = "[" + v.String() + "]"
 			continue
 		}
 	}
@@ -53,8 +53,8 @@ func GetOpenPorts(ip string, ports ...int) (open []int) {
 	return
 }
 
-func isPortOpen(ip string, port int) bool  {
-	target := fmt.Sprintf("%s:%d",ip, port)
+func isPortOpen(ip string, port int) bool {
+	target := fmt.Sprintf("%s:%d", ip, port)
 	for {
 		conn, err := net.DialTimeout("tcp", target, timeout)
 		if err != nil {
