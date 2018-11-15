@@ -1,3 +1,4 @@
+// Package scanner provides useful functions for scanning the open port.
 package scanner
 
 import (
@@ -10,6 +11,8 @@ import (
 
 const timeout = time.Millisecond * 500
 
+// NSLookUP provides a IP lookup for specified host,
+// returns IPv4 and IPv6 strings (if have).
 func NSLookUp(host string) (ipv4, ipv6 string, err error) {
 	ips, err := net.LookupIP(host)
 	if err != nil {
@@ -33,6 +36,9 @@ func NSLookUp(host string) (ipv4, ipv6 string, err error) {
 	return
 }
 
+// GetOpenPorts find the open port on specified host
+// with the slice of ports of host provided,
+// returns the slice of open ports of the host.
 func GetOpenPorts(ip string, ports ...int) (open []int) {
 	lock := &sync.Mutex{}
 	wg := &sync.WaitGroup{}
