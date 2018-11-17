@@ -10,6 +10,7 @@ import (
 )
 
 const timeout = time.Millisecond * 500
+const limit = 4
 
 // NSLookUp provides a IP lookup for specified host,
 // returns IPv4 and IPv6 strings (if have).
@@ -43,19 +44,26 @@ func GetOpenPorts(ip string, ports ...int) (open []int) {
 	lock := &sync.Mutex{}
 	wg := &sync.WaitGroup{}
 	wg.Add(len(ports))
-
+	// A channel with buffer length limit
+	sem := make(chan struct{}, limit)
 	for _, v := range ports {
-		go func(ip string, port int, lock sync.Locker, wg *sync.WaitGroup) {
+		go func(host string, port int, wg *sync.WaitGroup, lock sync.Locker) {
 			defer wg.Done()
+			// Free channel buffer
+			defer func() {<- sem}()
+			// Block until the channel buffer available
+			sem <- struct{}{}
+
 			if isPortOpen(ip, port) {
 				lock.Lock()
 				open = append(open, port)
 				lock.Unlock()
 			}
-		}(ip, v, lock, wg)
+		}(ip, v, wg, lock)
 	}
 
 	wg.Wait()
+	close(sem)
 	return
 }
 
