@@ -36,3 +36,11 @@ var knownPorts = map[int]string{
 	8080:  "Alternative port for HTTP/ Apache Tomcat",
 	27017: "MongoDB daemon process",
 }
+
+func GetKnownPorts() []int {
+	ports := []int{}
+	for port, _ := range knownPorts {
+		ports = append(ports, port)
+	}
+	return ports
+}

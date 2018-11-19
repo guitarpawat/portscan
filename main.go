@@ -2,12 +2,15 @@ package main
 
 import (
 	"fmt"
+
+	"github.com/guitarpawat/portscan/api"
 	"github.com/guitarpawat/portscan/scanner"
 )
 
 func main() {
-	ipv4, _, _ := scanner.NSLookUp("www.google.com")
-	fmt.Println(scanner.GetOpenPorts(ipv4, 80, 100, 200, 300, 400, 443, 500))
-	ipv6, _, _ := scanner.NSLookUp("www.google.com")
-	fmt.Println(scanner.GetOpenPorts(ipv6, 80, 100, 200, 300, 400, 443, 500))
+	ipv4, ipv6, _ := scanner.NSLookUp("www.google.com")
+	knowPorts := api.GetKnownPorts()
+	fmt.Println(knowPorts)
+	fmt.Println(scanner.GetOpenPorts(ipv4, knowPorts...))
+	fmt.Println(scanner.GetOpenPorts(ipv6, knowPorts...))
 }
