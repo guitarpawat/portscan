@@ -14,24 +14,16 @@ const limit = 4
 
 // NSLookUp provides a IP lookup for specified host,
 // returns IPv4 and IPv6 strings (if have).
-func NSLookUp(host string) (ipv4, ipv6 string, err error) {
+func NSLookUp(host string) (ipv4 string, err error) {
 	ips, err := net.LookupIP(host)
 	if err != nil {
 		return
 	}
 	for _, v := range ips {
-		if len(ipv4) != 0 && len(ipv6) != 0 {
-			break
-		}
 		v4 := v.To4()
 		if v4 != nil && len(ipv4) == 0 {
 			ipv4 = v.String()
-			continue
-		}
-		v6 := v.To16()
-		if v6 != nil && len(ipv6) == 0 {
-			ipv6 = "[" + v.String() + "]"
-			continue
+			break
 		}
 	}
 	return
@@ -46,20 +38,20 @@ func GetOpenPorts(ip string, ports ...int) (open []int) {
 	wg.Add(len(ports))
 	// A channel with buffer length limit
 	sem := make(chan struct{}, limit)
-	for _, v := range ports {
-		go func(host string, port int, wg *sync.WaitGroup, lock sync.Locker) {
+	for _, port := range ports {
+		// Block until the channel buffer available
+		sem <- struct{}{}
+		go func(ip string, port int, wg *sync.WaitGroup, lock sync.Locker, sem <- chan struct{}) {
 			defer wg.Done()
 			// Free channel buffer
 			defer func() {<- sem}()
-			// Block until the channel buffer available
-			sem <- struct{}{}
 
 			if isPortOpen(ip, port) {
 				lock.Lock()
 				open = append(open, port)
 				lock.Unlock()
 			}
-		}(ip, v, wg, lock)
+		}(ip, port, wg, lock, sem)
 	}
 
 	wg.Wait()

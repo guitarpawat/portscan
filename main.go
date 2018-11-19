@@ -8,9 +8,8 @@ import (
 )
 
 func main() {
-	ipv4, ipv6, _ := scanner.NSLookUp("www.google.com")
+	ipv4, _ := scanner.NSLookUp("www.google.com")
 	knowPorts := api.GetKnownPorts()
 	fmt.Println(knowPorts)
 	fmt.Println(scanner.GetOpenPorts(ipv4, knowPorts...))
-	fmt.Println(scanner.GetOpenPorts(ipv6, knowPorts...))
 }
