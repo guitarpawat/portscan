@@ -30,3 +30,6 @@ vendor/
 # Mac
 .DS_Store
 wsp-ecommerce
+
+# BoldDB
+.db
