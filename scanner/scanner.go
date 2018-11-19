@@ -41,10 +41,10 @@ func GetOpenPorts(ip string, ports ...int) (open []int) {
 	for _, port := range ports {
 		// Block until the channel buffer available
 		sem <- struct{}{}
-		go func(ip string, port int, wg *sync.WaitGroup, lock sync.Locker, sem <- chan struct{}) {
+		go func(ip string, port int, wg *sync.WaitGroup, lock sync.Locker, sem <-chan struct{}) {
 			defer wg.Done()
 			// Free channel buffer
-			defer func() {<- sem}()
+			defer func() { <-sem }()
 
 			if isPortOpen(ip, port) {
 				lock.Lock()
