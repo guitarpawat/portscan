@@ -62,7 +62,6 @@ func TestUnMarshalGetOutput_Error(t *testing.T) {
 		t.Errorf("expected error")
 	}
 
-	err = nil
 	_, err = UnMarshalGetOutput(nil)
 	if err == nil {
 		t.Errorf("expected error")
