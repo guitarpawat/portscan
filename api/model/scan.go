@@ -9,7 +9,7 @@ type ScanInput struct {
 
 type Target struct {
 	Address string `json:"address"`
-	Ports   []int `json:"ports"`
+	Ports   []int  `json:"ports"`
 }
 
 // ScanOutput is the json model for returning port scanning request with Token id

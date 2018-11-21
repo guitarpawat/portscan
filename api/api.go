@@ -42,6 +42,6 @@ func PutNewScanRequest(b []byte) model.Json {
 
 	return &model.ScanOutput{
 		Token: token,
-		IP: ip,
+		IP:    ip,
 	}
 }
