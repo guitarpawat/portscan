@@ -2,6 +2,14 @@
 
 
 [[projects]]
+  branch = "master"
+  digest = "1:84403cd0c5149373e2931b0d219c6f6ff17a0ee85645d3d9dae06ae41d9ee7b4"
+  name = "github.com/chilts/sid"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "250d10e55bf450834d37cb13b7dae8816ada9b28"
+
+[[projects]]
   digest = "1:c28625428387b63dd7154eb857f51e700465cfbf7c06f619e71f2da33cefe47e"
   name = "go.etcd.io/bbolt"
   packages = ["."]
@@ -20,6 +28,9 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  input-imports = ["go.etcd.io/bbolt"]
+  input-imports = [
+    "github.com/chilts/sid",
+    "go.etcd.io/bbolt",
+  ]
   solver-name = "gps-cdcl"
   solver-version = 1

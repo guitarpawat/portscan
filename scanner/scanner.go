@@ -12,6 +12,34 @@ import (
 const timeout = time.Millisecond * 1000
 const limit = 8
 
+func IsV4(s string) bool {
+	ip := net.ParseIP(s)
+	if ip == nil {
+		return false
+	}
+
+	v4 := ip.To4()
+	if v4 != nil {
+		return true
+	}
+
+	return false
+}
+
+func IsV6(s string) bool {
+	ip := net.ParseIP(s)
+	if ip == nil {
+		return false
+	}
+
+	v6 := ip.To16()
+	if v6 != nil {
+		return true
+	}
+
+	return false
+}
+
 // NSLookUp provides a IP lookup for specified host,
 // returns IPv4 strings.
 func NSLookUp(host string) (ipv4 string, err error) {

@@ -115,6 +115,8 @@ func UpdateTokenInfo(id string, result model.Result) error {
 		return err
 	}
 
+	res.LastUpdate = time.Now()
+
 	res.Results = append(res.Results, result)
 	return db.Update(func(tx *bolt.Tx) error {
 		bucket := tx.Bucket([]byte(bucketName))
