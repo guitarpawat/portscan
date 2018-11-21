@@ -13,7 +13,7 @@ const timeout = time.Millisecond * 1000
 const limit = 8
 
 // NSLookUp provides a IP lookup for specified host,
-// returns IPv4 and IPv6 strings (if have).
+// returns IPv4 strings.
 func NSLookUp(host string) (ipv4 string, err error) {
 	ips, err := net.LookupIP(host)
 	if err != nil {

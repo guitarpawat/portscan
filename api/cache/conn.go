@@ -1,3 +1,4 @@
+// Package cache provides database connection for store the result as a cache
 package cache
 
 import (
@@ -87,7 +88,7 @@ func GetTokenInfo(id string) (model.GetOutput, error) {
 	err = db.View(func(tx *bolt.Tx) error {
 		bucket := tx.Bucket([]byte(bucketName))
 		if bucket == nil {
-			return errors.New("no db bucket found")
+			return errors.New("db bucket not found")
 		}
 		b := bucket.Get([]byte(id))
 		if b == nil {
@@ -128,5 +129,22 @@ func UpdateTokenInfo(id string, result model.Result) error {
 		}
 
 		return bucket.Put([]byte(id), b)
+	})
+}
+
+// DeleteToken deletes the specify token from the database
+func DeleteToken(id string) error {
+	db, err := getDB()
+	if err != nil {
+		return err
+	}
+
+	return db.Update(func(tx *bolt.Tx) error {
+		bucket := tx.Bucket([]byte(bucketName))
+		if bucket == nil {
+			return errors.New("db bucket not found")
+		}
+
+		return bucket.Delete([]byte(id))
 	})
 }

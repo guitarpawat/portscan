@@ -1,3 +1,4 @@
+// Package portdes contains the description of the common used ports.
 package portdes
 
 const unknown = "<unknown>"
