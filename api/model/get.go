@@ -2,6 +2,7 @@ package model
 
 import (
 	"encoding/json"
+	"github.com/guitarpawat/portscan/api/portdes"
 	"time"
 )
 
@@ -51,4 +52,18 @@ func MakeGetOutput(ip ...string) (out GetOutput) {
 		v.Finished = false
 	}
 	return
+}
+
+func MakeResult(ip string, ports ...int) Result {
+	p := make([]Port, len(ports))
+	for i:=0; i<len(ports); i++ {
+		port := Port{ports[i], portdes.GetPortDescription(ports[i])}
+		p = append(p, port)
+	}
+
+	return Result{
+		IP: ip,
+		Ports: p,
+		Finished: true,
+	}
 }
