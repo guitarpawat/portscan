@@ -1,6 +1,7 @@
 package cache
 
 import (
+	"github.com/guitarpawat/portscan/api/model"
 	"go.etcd.io/bbolt"
 	"time"
 )
@@ -19,4 +20,27 @@ func getDB() (*bolt.DB, error) {
 		db = conn
 	}
 	return db, nil
+}
+
+func PutNewToken(id string, ip ...string) error {
+	db, err := getDB()
+	if err != nil {
+		return err
+	}
+
+	return db.Update(func(tx *bolt.Tx) error {
+		bucket, err := tx.CreateBucketIfNotExists([]byte(bucketName))
+		if err != nil {
+			return err
+		}
+
+		val := model.MakeGetOutput(ip...)
+
+		b, err := val.Marshal()
+		if err != nil {
+			return err
+		}
+
+		return bucket.Put([]byte(id), b)
+	})
 }
