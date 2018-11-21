@@ -6,12 +6,12 @@ import (
 	"time"
 )
 
-// GetInput is json model for getting result of specific token id
+// GetInput is json model for getting result of specific Token id
 type GetInput struct {
-	token string `json:"token"`
+	Token string `json:"Token"`
 }
 
-// GetOutput is json model for returning result of specific token id
+// GetOutput is json model for returning result of specific Token id
 type GetOutput struct {
 	Results    []Result  `json:"results"`
 	LastUpdate time.Time `json:"last_update"`

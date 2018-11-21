@@ -5,8 +5,8 @@ type ScanInput struct {
 	Target string `json:"target"`
 }
 
-// ScanOutput is the json model for returning port scanning request with token id
+// ScanOutput is the json model for returning port scanning request with Token id
 type ScanOutput struct {
-	Token string   `json:"token"`
+	Token string   `json:"Token"`
 	IP    []string `json:"ip"`
 }
