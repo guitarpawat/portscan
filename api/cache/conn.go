@@ -4,14 +4,15 @@ package cache
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"github.com/guitarpawat/portscan/api/model"
 	"go.etcd.io/bbolt"
+	"log"
 	"os"
 	"os/signal"
 	"time"
 )
 
+const dbfile = "portscan.db"
 const bucketName = "portscan"
 const timeout = 1 * time.Second
 
@@ -38,7 +39,7 @@ func init() {
 
 func getDB() (*bolt.DB, error) {
 	if db == nil {
-		conn, err := bolt.Open("portscan.db", 0600, &bolt.Options{Timeout: timeout})
+		conn, err := bolt.Open(dbfile, 0600, &bolt.Options{Timeout: timeout})
 		if err != nil {
 			return nil, err
 		}
@@ -49,8 +50,18 @@ func getDB() (*bolt.DB, error) {
 
 // CloseDB closes the database connection
 func CloseDB() error {
-	fmt.Println("db closed")
-	return db.Close()
+	err := db.Close()
+	if err != nil {
+		return err
+	}
+
+	err = os.Remove(dbfile)
+	if err != nil {
+		return err
+	}
+
+	log.Println("cleared cache")
+	return nil
 }
 
 // PutNewToken register new token to database

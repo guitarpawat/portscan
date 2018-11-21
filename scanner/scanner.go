@@ -60,26 +60,31 @@ func NSLookUp(host string) (ipv4 string, err error) {
 // GetOpenPorts find the open port on specified host
 // with the slice of ports of host provided,
 // returns the slice of open ports of the host.
-func GetOpenPorts(ip string, ports ...int) (open []int) {
+func GetOpenPorts(ip string, kill <-chan struct{}, ports ...int) (open []int) {
 	lock := &sync.Mutex{}
 	wg := &sync.WaitGroup{}
 	wg.Add(len(ports))
 	// A channel with buffer length limit
 	sem := make(chan struct{}, limit)
 	for _, port := range ports {
-		// Block until the channel buffer available
-		sem <- struct{}{}
-		go func(ip string, port int, wg *sync.WaitGroup, lock sync.Locker, sem <-chan struct{}) {
-			defer wg.Done()
-			// Free channel buffer
-			defer func() { <-sem }()
+		select {
+		case <-kill:
+			return
+		default:
+			// Block until the channel buffer available
+			sem <- struct{}{}
+			go func(ip string, port int, wg *sync.WaitGroup, lock sync.Locker, sem <-chan struct{}) {
+				defer wg.Done()
+				// Free channel buffer
+				defer func() { <-sem }()
 
-			if isPortOpen(ip, port) {
-				lock.Lock()
-				open = append(open, port)
-				lock.Unlock()
-			}
-		}(ip, port, wg, lock, sem)
+				if isPortOpen(ip, port) {
+					lock.Lock()
+					open = append(open, port)
+					lock.Unlock()
+				}
+			}(ip, port, wg, lock, sem)
+		}
 	}
 
 	wg.Wait()

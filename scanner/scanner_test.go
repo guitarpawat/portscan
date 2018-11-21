@@ -35,7 +35,7 @@ func TestGetOpenPorts(t *testing.T) {
 	listener2.Close()
 	port1 := listener1.Addr().(*net.TCPAddr).Port
 	port2 := listener2.Addr().(*net.TCPAddr).Port
-	open := GetOpenPorts("localhost", port1, port2)
+	open := GetOpenPorts("localhost", nil, port1, port2)
 
 	if len(open) != 1 {
 		t.Fatalf("expected slice of open ports length: %d, but get: %d", 1, len(open))
