@@ -9,8 +9,8 @@ import (
 	"time"
 )
 
-const timeout = time.Millisecond * 500
-const limit = 4
+const timeout = time.Millisecond * 1000
+const limit = 8
 
 // NSLookUp provides a IP lookup for specified host,
 // returns IPv4 and IPv6 strings (if have).
