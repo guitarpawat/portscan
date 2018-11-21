@@ -122,7 +122,6 @@ func UpdateTokenInfo(id string, result model.Result) error {
 			return err
 		}
 
-
 		b, err := res.Marshal()
 		if err != nil {
 			return err

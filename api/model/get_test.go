@@ -13,7 +13,7 @@ func TestGetOutput_Marshal_And_UnMarshalGetOutput(t *testing.T) {
 				IP: "127.0.0.1",
 				Ports: []Port{
 					{
-						Port: 80,
+						Port:        80,
 						Description: portdes.GetPortDescription(80),
 					},
 				},
@@ -110,7 +110,7 @@ func TestMakeResult(t *testing.T) {
 	}
 }
 
-func checkPortDescription(t *testing.T, port int, description string)  {
+func checkPortDescription(t *testing.T, port int, description string) {
 	if description != portdes.GetPortDescription(port) {
 		t.Errorf("expected description of port %d: %s, but get: %s", port,
 			portdes.GetPortDescription(port), description)

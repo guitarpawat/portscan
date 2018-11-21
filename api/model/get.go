@@ -13,15 +13,15 @@ type GetInput struct {
 
 // GetOutput is json model for returning result of specific token id
 type GetOutput struct {
-	Results []Result     `json:"results"`
+	Results    []Result  `json:"results"`
 	LastUpdate time.Time `json:"last_update"`
 }
 
 // Result stores the open ports of specify IP
 type Result struct {
-	IP         string    `json:"ip"`
-	Ports      []Port    `json:"ports"`
-	Finished   bool      `json:"finished"`
+	IP       string `json:"ip"`
+	Ports    []Port `json:"ports"`
+	Finished bool   `json:"finished"`
 }
 
 // Port stores description of the port for returning with the result
@@ -31,7 +31,7 @@ type Port struct {
 }
 
 // Marshal the GetOutput to json byte slice
-func(out *GetOutput) Marshal() ([]byte, error) {
+func (out *GetOutput) Marshal() ([]byte, error) {
 	return json.Marshal(out)
 }
 
@@ -49,11 +49,11 @@ func UnMarshalGetOutput(b []byte) (*GetOutput, error) {
 // MakeGetOutput is the helper to make the GetOutput struct
 func MakeGetOutput(ip ...string) GetOutput {
 	out := GetOutput{
-		Results: make([]Result, len(ip)),
+		Results:    make([]Result, len(ip)),
 		LastUpdate: time.Now(),
 	}
 
-	for i:=0; i<len(ip); i++ {
+	for i := 0; i < len(ip); i++ {
 		v := Result{}
 		v.IP = ip[i]
 		v.Ports = []Port{}
@@ -66,14 +66,14 @@ func MakeGetOutput(ip ...string) GetOutput {
 // MakeResult is the helper to make the Result struct, returns with port description
 func MakeResult(ip string, ports ...int) Result {
 	p := make([]Port, len(ports))
-	for i:=0; i<len(ports); i++ {
+	for i := 0; i < len(ports); i++ {
 		port := Port{ports[i], portdes.GetPortDescription(ports[i])}
 		p[i] = port
 	}
 
 	return Result{
-		IP: ip,
-		Ports: p,
+		IP:       ip,
+		Ports:    p,
 		Finished: true,
 	}
 }
