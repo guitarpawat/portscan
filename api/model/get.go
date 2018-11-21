@@ -47,18 +47,20 @@ func UnMarshalGetOutput(b []byte) (*GetOutput, error) {
 }
 
 // MakeGetOutput is the helper to make the GetOutput struct
-func MakeGetOutput(ip ...string) (out GetOutput) {
-	out = GetOutput{
+func MakeGetOutput(ip ...string) GetOutput {
+	out := GetOutput{
 		Results: make([]Result, len(ip)),
 		LastUpdate: time.Now(),
 	}
 
-	for i, v := range out.Results {
+	for i:=0; i<len(ip); i++ {
+		v := Result{}
 		v.IP = ip[i]
 		v.Ports = []Port{}
 		v.Finished = false
+		out.Results[i] = v
 	}
-	return
+	return out
 }
 
 // MakeResult is the helper to make the Result struct, returns with port description
@@ -66,7 +68,7 @@ func MakeResult(ip string, ports ...int) Result {
 	p := make([]Port, len(ports))
 	for i:=0; i<len(ports); i++ {
 		port := Port{ports[i], portdes.GetPortDescription(ports[i])}
-		p = append(p, port)
+		p[i] = port
 	}
 
 	return Result{
