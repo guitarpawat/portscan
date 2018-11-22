@@ -53,7 +53,7 @@ func (t *tasks) revokeChan(token string) {
 func killTimeOut() {
 	for k := range routines.Tasks {
 		out, _ := cache.GetTokenInfo(k)
-		if time.Since(out.LastUpdate) >= 3 * time.Minute {
+		if time.Since(out.LastUpdate) >= 3*time.Minute {
 			routines.revokeChan(k)
 			cache.DeleteToken(k)
 		}
@@ -72,7 +72,7 @@ func registerChan(token string, kill chan struct{}) {
 	routines.registerChan(token, kill)
 }
 
-func revokeChan(token string)  {
+func revokeChan(token string) {
 	routines.Lock()
 	defer routines.Unlock()
 	routines.revokeChan(token)

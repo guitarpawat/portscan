@@ -8,7 +8,7 @@ import (
 func TestScanOutput_Marshal(t *testing.T) {
 	out := ScanOutput{
 		Token: "asdf",
-		IP: []string{"127.0.0.1"},
+		IP:    []string{"127.0.0.1"},
 	}
 
 	b, _ := out.Marshal()
@@ -16,11 +16,11 @@ func TestScanOutput_Marshal(t *testing.T) {
 	json.Unmarshal(b, &res)
 
 	if out.Token != res.Token {
-		t.Errorf("expected token: %s, but get: %s", out.Token, res.Token )
+		t.Errorf("expected token: %s, but get: %s", out.Token, res.Token)
 	}
 
 	if out.IP[0] != res.IP[0] {
-		t.Errorf("expected ip: %s, but get: %s", out.IP[0], res.IP[0] )
+		t.Errorf("expected ip: %s, but get: %s", out.IP[0], res.IP[0])
 	}
 }
 
@@ -29,7 +29,7 @@ func TestUnMarshalScanInput(t *testing.T) {
 		Targets: []Target{
 			{
 				Address: "www.google.com",
-				Ports: []int{80},
+				Ports:   []int{80},
 			},
 		},
 	}
