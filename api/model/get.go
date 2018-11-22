@@ -77,3 +77,20 @@ func MakeResult(ip string, ports ...int) Result {
 		Finished: true,
 	}
 }
+
+// TODO: Do some tests
+// UnMarshalGetInput unmarshal the GetInput from json byte slice
+func UnMarshalGetInput(b []byte) (*GetInput, error) {
+	out := new(GetInput)
+	err := json.Unmarshal(b, out)
+	if err != nil {
+		return nil, err
+	}
+
+	return out, nil
+}
+
+// Marshal the GetInput to json byte slice
+func (out *GetInput) Marshal() ([]byte, error) {
+	return json.Marshal(out)
+}

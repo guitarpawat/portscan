@@ -10,7 +10,7 @@ import (
 )
 
 const timeout = time.Millisecond * 1000
-const limit = 8
+const limit = 4
 
 func IsV4(s string) bool {
 	ip := net.ParseIP(s)

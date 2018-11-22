@@ -1,29 +1,59 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
+	"github.com/guitarpawat/portscan/api"
 	"github.com/guitarpawat/portscan/api/cache"
 	"github.com/guitarpawat/portscan/api/model"
+	"log"
 	"time"
 )
 
 func main() {
 	defer cache.CloseDB()
-	s := model.GetOutput{
-		Results: []model.Result{
+
+	input := model.ScanInput{
+		Targets: []model.Target{
 			{
-				IP:       "127.0.0.1",
-				Finished: false,
+				Address: "www.google.com",
+				Ports: []int{80,433,443,27017},
 			},
+			{
+				Address: "127.0.0.1",
+				Ports: []int{10,20,30,40,50,60,70,80,90,100,200,300,400,433,443,500,4433,8000,27017},
+			},
+			//{
+			//	Address: "www.google.com",
+			//	Ports: []int{80, 443, 433, 500},
+			//},
+			//{
+			//	Address: "127.0.0.1",
+			//	Ports: []int{80, 443, 433, 500},
+			//},
 		},
-		LastUpdate: time.Now(),
 	}
 
-	b, _ := s.Marshal()
-	fmt.Println(b)
-	fmt.Println(model.UnMarshalGetOutput(b))
-	fmt.Println(cache.PutNewToken("test", "127.0.0.1"))
-	fmt.Println(cache.UpdateTokenInfo("test", model.MakeResult("127.0.0.1", 80)))
-	fmt.Println(cache.GetTokenInfo("test"))
-	fmt.Println(cache.DeleteToken("test"))
+	b, err := json.Marshal(input)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	res := api.PutNewScanRequest(b).(*model.ScanOutput)
+	fmt.Println(res)
+
+	token := res.Token
+	getin := model.GetInput{token}
+	b, err = getin.Marshal()
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	for {
+		out, _ := api.GetUpdateScanResult(b).Marshal()
+		fmt.Println(string(out))
+		time.Sleep(time.Second * 1)
+	}
 }

@@ -77,7 +77,7 @@ func PutNewToken(id string, ip ...string) error {
 			return err
 		}
 
-		val := model.MakeGetOutput(ip...)
+		val := model.MakeGetOutput()
 
 		b, err := val.Marshal()
 		if err != nil {
@@ -121,15 +121,15 @@ func GetTokenInfo(id string) (model.GetOutput, error) {
 
 // UpdateTokenInfo updates the results for specified token id
 func UpdateTokenInfo(id string, result model.Result) error {
-	res, err := GetTokenInfo(id)
-	if err != nil {
-		return err
-	}
-
-	res.LastUpdate = time.Now()
-
-	res.Results = append(res.Results, result)
 	return db.Update(func(tx *bolt.Tx) error {
+		res, err := GetTokenInfo(id)
+		if err != nil {
+			return err
+		}
+		res.LastUpdate = time.Now()
+
+		res.Results = append(res.Results, result)
+
 		bucket := tx.Bucket([]byte(bucketName))
 		if err != nil {
 			return err
