@@ -1,5 +1,8 @@
 # Portscan
 
+[![Go Report Card](https://goreportcard.com/badge/github.com/guitarpawat/portscan)](https://goreportcard.com/report/github.com/guitarpawat/portscan)
+[![GoDoc](https://godoc.org/github.com/guitarpawat/portscan?status.svg)](https://godoc.org/github.com/guitarpawat/portscan)
+
 ## SampleInput
 
 ### POST /api/scan
