@@ -1,7 +1,6 @@
 package api
 
 import (
-	"fmt"
 	"github.com/chilts/sid"
 	"github.com/guitarpawat/portscan/api/cache"
 	"github.com/guitarpawat/portscan/api/model"
@@ -51,8 +50,6 @@ func PutNewScanRequest(b []byte) model.Json {
 
 	}
 
-	fmt.Println(ip)
-
 	err = cache.PutNewToken(token, ip...)
 	if err != nil {
 		return model.MakeError(err)
@@ -62,7 +59,6 @@ func PutNewScanRequest(b []byte) model.Json {
 	registerToken(token)
 
 	for _, ip := range input.Targets {
-		fmt.Println("IP", ip)
 		routines.Lock()
 		_, ok := routines.Tasks[token]
 		routines.Unlock()
@@ -95,7 +91,6 @@ func GetUpdateScanResult(b []byte) model.Json {
 	}
 
 	out, err := cache.GetTokenInfo(input.Token)
-	//fmt.Println(out)
 	if err != nil {
 		return model.MakeError(err)
 	}
