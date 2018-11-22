@@ -20,7 +20,9 @@ func init() {
 	}()
 }
 
-// TODO: Add docs
+// PutNewScanRequest is RESTful API request for add new port scan task
+//
+// Accept: ScanInput, Returns: ScanOutput or Error
 func PutNewScanRequest(b []byte) model.Json {
 	input, err := model.UnMarshalScanInput(b)
 	if err != nil {
@@ -83,6 +85,9 @@ func PutNewScanRequest(b []byte) model.Json {
 	}
 }
 
+// GetUpdateScanResult is RESTful API request for getting latest update of port scan task
+//
+// Accept: GetInput, Returns: GetOutput or Error
 func GetUpdateScanResult(b []byte) model.Json {
 	input, err := model.UnMarshalGetInput(b)
 	if err != nil {
@@ -98,6 +103,9 @@ func GetUpdateScanResult(b []byte) model.Json {
 	return &out
 }
 
+// GetUpdateScanResult is RESTful API request for delete unused port scan task
+//
+// Accept: GetInput, Returns: nil or Error
 func KillScanRequest(b []byte) model.Json {
 	in, err := model.UnMarshalGetInput(b)
 	if err != nil {

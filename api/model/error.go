@@ -8,19 +8,21 @@ type Error struct {
 }
 
 // Error returns the error string to satisfy with error interface
-func (e Error) Error() string {
+func (e *Error) Error() string {
 	return e.ErrorMsg
 }
 
-// TODO: Add docs and tests
+// Marshal returns the json version of the error
 func (e *Error) Marshal() ([]byte, error) {
 	return json.Marshal(e)
 }
 
+// MakeError makes error with json support from error
 func MakeError(err error) *Error {
 	return &Error{err.Error()}
 }
 
+// MakeErrorString makes error with json support from string
 func MakeErrorString(err string) *Error {
 	return &Error{err}
 }

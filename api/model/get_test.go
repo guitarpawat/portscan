@@ -115,3 +115,13 @@ func checkPortDescription(t *testing.T, port int, description string) {
 			portdes.GetPortDescription(port), description)
 	}
 }
+
+func TestGetInput_Marshal_And_UnMarshalGetOutput(t *testing.T) {
+	expectedToken := "asdf"
+	input := GetInput{expectedToken}
+	jsonData, _ := input.Marshal()
+	out, _ := UnMarshalGetInput(jsonData)
+	if expectedToken != out.Token {
+		t.Errorf("expected token: %s, but get: %s", expectedToken, out.Token)
+	}
+}

@@ -78,7 +78,6 @@ func MakeResult(ip string, ports ...int) Result {
 	}
 }
 
-// TODO: Do some tests
 // UnMarshalGetInput unmarshal the GetInput from json byte slice
 func UnMarshalGetInput(b []byte) (*GetInput, error) {
 	out := new(GetInput)

@@ -18,11 +18,12 @@ type ScanOutput struct {
 	IP    []string `json:"ip"`
 }
 
-// TODO: Add docs and tests
+// Marshal the ScanOutput into JSON bytes
 func (out *ScanOutput) Marshal() ([]byte, error) {
 	return json.Marshal(out)
 }
 
+// UnMarshalScanInput converts JSON bytes into ScanInput
 func UnMarshalScanInput(b []byte) (*ScanInput, error) {
 	out := new(ScanInput)
 	err := json.Unmarshal(b, out)
