@@ -6,10 +6,21 @@ import (
 	"github.com/guitarpawat/portscan/api/cache"
 	"github.com/guitarpawat/portscan/api/model"
 	"github.com/guitarpawat/portscan/scanner"
+	"time"
 )
 
 const limit = 8
 
+func init() {
+	go func() {
+		for {
+			time.Sleep(3 * time.Minute)
+			go killTimeoutBatch()
+		}
+	}()
+}
+
+// TODO: Add docs
 func PutNewScanRequest(b []byte) model.Json {
 	input, err := model.UnMarshalScanInput(b)
 	if err != nil {
@@ -46,9 +57,8 @@ func PutNewScanRequest(b []byte) model.Json {
 	}
 
 	//sem := make(chan struct{}, limit)
-	routines.registerToken(token)
+	registerToken(token)
 
-	// TODO: Add goroutine to scan the host concurrently
 	for _, ip := range input.Targets {
 		fmt.Println("IP", ip)
 		routines.Lock()
@@ -58,7 +68,7 @@ func PutNewScanRequest(b []byte) model.Json {
 			break
 		}
 		kill := make(chan struct{}, 1)
-		routines.registerChan(token, kill)
+		registerChan(token, kill)
 		go func(sem, kill chan struct{}, ip string, ports ...int) {
 			//sem <- struct{}{}
 			//defer func() { <-sem }()
@@ -86,4 +96,26 @@ func GetUpdateScanResult(b []byte) model.Json {
 	}
 
 	return &out
+}
+
+func KillScanRequest(b []byte) model.Json {
+	in, err := model.UnMarshalGetInput(b)
+	if err != nil {
+		return model.MakeError(err)
+	}
+
+	revokeChan(in.Token)
+
+	err = cache.DeleteToken(in.Token)
+	if err != nil {
+		return model.MakeError(err)
+	}
+
+	return nil
+}
+
+func killTimeoutBatch() {
+	routines.Lock()
+	defer routines.Unlock()
+	killTimeOut()
 }

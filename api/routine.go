@@ -1,6 +1,10 @@
 package api
 
-import "sync"
+import (
+	"github.com/guitarpawat/portscan/api/cache"
+	"sync"
+	"time"
+)
 
 type tasks struct {
 	Tasks map[string]task
@@ -17,8 +21,6 @@ var routines = &tasks{
 }
 
 func (t *tasks) registerToken(token string) {
-	t.Lock()
-	defer t.Unlock()
 	_, ok := t.Tasks[token]
 	if !ok {
 		t.Tasks[token] = task{
@@ -28,8 +30,6 @@ func (t *tasks) registerToken(token string) {
 }
 
 func (t *tasks) registerChan(token string, kill chan struct{}) {
-	t.Lock()
-	defer t.Unlock()
 	tasks, ok := t.Tasks[token]
 	if !ok {
 		t.Tasks[token] = task{
@@ -40,8 +40,6 @@ func (t *tasks) registerChan(token string, kill chan struct{}) {
 }
 
 func (t *tasks) revokeChan(token string) {
-	t.Lock()
-	defer t.Unlock()
 	m, ok := t.Tasks[token]
 	if !ok {
 		return
@@ -50,4 +48,32 @@ func (t *tasks) revokeChan(token string) {
 		v <- struct{}{}
 	}
 	delete(t.Tasks, token)
+}
+
+func killTimeOut() {
+	for k := range routines.Tasks {
+		out, _ := cache.GetTokenInfo(k)
+		if time.Since(out.LastUpdate) >= 3 * time.Minute {
+			routines.revokeChan(k)
+			cache.DeleteToken(k)
+		}
+	}
+}
+
+func registerToken(token string) {
+	routines.Lock()
+	defer routines.Unlock()
+	routines.registerToken(token)
+}
+
+func registerChan(token string, kill chan struct{}) {
+	routines.Lock()
+	defer routines.Unlock()
+	routines.registerChan(token, kill)
+}
+
+func revokeChan(token string)  {
+	routines.Lock()
+	defer routines.Unlock()
+	routines.revokeChan(token)
 }

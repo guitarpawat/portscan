@@ -51,6 +51,13 @@ func main() {
 		return
 	}
 
+	errjson := api.KillScanRequest(b)
+	if errjson != nil {
+		fmt.Println(errjson)
+	} else {
+		fmt.Println("deleted!")
+	}
+
 	for {
 		out, _ := api.GetUpdateScanResult(b).Marshal()
 		fmt.Println(string(out))
