@@ -19,6 +19,7 @@ type GetOutput struct {
 
 // Result stores the open ports of specify IP
 type Result struct {
+	Host     string `json:"host,omitempty"`
 	IP       string `json:"ip"`
 	Ports    []Port `json:"ports"`
 	Finished bool   `json:"finished"`
@@ -64,7 +65,7 @@ func MakeGetOutput(ip ...string) GetOutput {
 }
 
 // MakeResult is the helper to make the Result struct, returns with port description
-func MakeResult(ip string, ports ...int) Result {
+func MakeResult(host, ip string, ports ...int) Result {
 	p := make([]Port, len(ports))
 	for i := 0; i < len(ports); i++ {
 		port := Port{ports[i], portdes.GetPortDescription(ports[i])}
@@ -72,6 +73,7 @@ func MakeResult(ip string, ports ...int) Result {
 	}
 
 	return Result{
+		Host:     host,
 		IP:       ip,
 		Ports:    p,
 		Finished: true,

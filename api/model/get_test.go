@@ -10,7 +10,8 @@ func TestGetOutput_Marshal_And_UnMarshalGetOutput(t *testing.T) {
 	expected := GetOutput{
 		Results: []Result{
 			{
-				IP: "127.0.0.1",
+				Host: "localhost",
+				IP:   "127.0.0.1",
 				Ports: []Port{
 					{
 						Port:        80,
@@ -31,6 +32,10 @@ func TestGetOutput_Marshal_And_UnMarshalGetOutput(t *testing.T) {
 	result, err := UnMarshalGetOutput(b)
 	if err != nil {
 		t.Errorf("unexpected error: %s", err)
+	}
+
+	if expected.Results[0].Host != result.Results[0].Host {
+		t.Errorf("expected host: %s, but get: %s", expected.Results[0].Host, result.Results[0].Host)
 	}
 
 	if expected.Results[0].IP != result.Results[0].IP {
@@ -85,8 +90,13 @@ func TestMakeGetOutput(t *testing.T) {
 }
 
 func TestMakeResult(t *testing.T) {
+	expectedHost := "localhost"
 	expectedIP := "127.0.0.1"
-	out := MakeResult(expectedIP, 80, -1)
+	out := MakeResult(expectedHost, expectedIP, 80, -1)
+
+	if out.Host != expectedHost {
+		t.Errorf("expected host: %s, but get: %s", expectedHost, out.Host)
+	}
 
 	if out.IP != expectedIP {
 		t.Errorf("expected ip: %s, but get: %s", expectedIP, out.IP)

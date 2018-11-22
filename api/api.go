@@ -28,12 +28,14 @@ func PutNewScanRequest(b []byte) model.Json {
 		return model.MakeError(err)
 	}
 
-	var token = sid.Id()
-	var ip []string
+	token := sid.Id()
+	ip := make([]string, len(input.Targets))
+	host := make([]string, len(input.Targets))
 
 	for i, t := range input.Targets {
 		if scanner.IsV4(t.Address) {
-			ip = append(ip, t.Address)
+			ip[i] = t.Address
+			host[i] = ""
 
 		} else if scanner.IsV6(t.Address) {
 			return model.MakeErrorString("ipv6 is not currently support")
@@ -44,7 +46,8 @@ func PutNewScanRequest(b []byte) model.Json {
 				return model.MakeError(err)
 			}
 
-			ip = append(ip, add)
+			ip[i] = add
+			host[i] = t.Address
 			input.Targets[i].Address = add
 		}
 
@@ -58,7 +61,7 @@ func PutNewScanRequest(b []byte) model.Json {
 	//sem := make(chan struct{}, limit)
 	registerToken(token)
 
-	for _, ip := range input.Targets {
+	for i := 0; i < len(input.Targets); i++ {
 		routines.Lock()
 		_, ok := routines.Tasks[token]
 		routines.Unlock()
@@ -67,12 +70,12 @@ func PutNewScanRequest(b []byte) model.Json {
 		}
 		kill := make(chan struct{}, 1)
 		registerChan(token, kill)
-		go func(sem, kill chan struct{}, ip string, ports ...int) {
+		go func(sem, kill chan struct{}, host, ip string, ports ...int) {
 			//sem <- struct{}{}
 			//defer func() { <-sem }()
 			open := scanner.GetOpenPorts(ip, kill, ports...)
-			cache.UpdateTokenInfo(token, model.MakeResult(ip, open...))
-		}(nil, kill, ip.Address, ip.Ports...)
+			cache.UpdateTokenInfo(token, model.MakeResult(host, ip, open...))
+		}(nil, kill, host[i], ip[i], input.Targets[i].Ports...)
 	}
 
 	return &model.ScanOutput{

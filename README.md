@@ -86,6 +86,7 @@ Output:
 {
   "results": [
     {
+      "host": "www.google.com",
       "ip":"172.217.166.132",
       "ports": [
         {
