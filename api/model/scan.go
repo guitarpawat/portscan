@@ -7,6 +7,7 @@ type ScanInput struct {
 	Targets []Target `json:"targets"`
 }
 
+// Target of the port scanner, helper for ScanInput
 type Target struct {
 	Address string `json:"address"`
 	Ports   []int  `json:"ports"`

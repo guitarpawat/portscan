@@ -44,3 +44,31 @@ func TestGetOpenPorts(t *testing.T) {
 		t.Errorf("expected open port: %d, but get %d", port1, open[0])
 	}
 }
+
+func TestIsV4(t *testing.T) {
+	ip := "127.0.0.1"
+	r := IsV4(ip)
+	if !r {
+		t.Errorf("expected IsV4 for %s to be %t", ip, true)
+	}
+
+	ip = "127.0.0.1.5"
+	r = IsV4(ip)
+	if r {
+		t.Errorf("expected IsV4 for %s to be %t", ip, false)
+	}
+}
+
+func TestIsV6(t *testing.T) {
+	ip := "::1"
+	r := IsV6(ip)
+	if !r {
+		t.Errorf("expected IsV6 for %s to be %t", ip, true)
+	}
+
+	ip = "g05::1"
+	r = IsV6(ip)
+	if r {
+		t.Errorf("expected IsV6 for %s to be %t", ip, false)
+	}
+}

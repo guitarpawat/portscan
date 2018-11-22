@@ -12,6 +12,7 @@ import (
 const timeout = time.Millisecond * 1000
 const limit = 4
 
+// IsV4 checks if input is IPv4 or not
 func IsV4(s string) bool {
 	ip := net.ParseIP(s)
 	if ip == nil {
@@ -26,6 +27,7 @@ func IsV4(s string) bool {
 	return false
 }
 
+// IsV6 checks if input is IPv6 or not
 func IsV6(s string) bool {
 	ip := net.ParseIP(s)
 	if ip == nil {

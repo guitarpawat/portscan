@@ -103,7 +103,7 @@ func GetUpdateScanResult(b []byte) model.Json {
 	return &out
 }
 
-// GetUpdateScanResult is RESTful API request for delete unused port scan task
+// KillScanRequest is RESTful API request for delete unused port scan task
 //
 // Accept: GetInput, Returns: nil or Error
 func KillScanRequest(b []byte) model.Json {
