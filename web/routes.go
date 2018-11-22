@@ -67,7 +67,11 @@ func handleDeleteToken(w http.ResponseWriter, r *http.Request) {
 }
 
 func handleError(w http.ResponseWriter, err error) {
-	w.WriteHeader(400)
+	if err.Error() == "token id not found" || err.Error() == "db bucket not found" {
+		w.WriteHeader(404)
+	} else {
+		w.WriteHeader(400)
+	}
 	jsonErr, _ := model.MakeError(err).Marshal()
 	w.Write(jsonErr)
 	return
@@ -80,9 +84,13 @@ func returnResult(w http.ResponseWriter, result model.Json) {
 		return
 	}
 
-	_, ok := result.(error)
+	jsonErr, ok := result.(error)
 	if ok {
-		w.WriteHeader(400)
+		if jsonErr.Error() == "token id not found" || jsonErr.Error() == "db bucket not found" {
+			w.WriteHeader(404)
+		} else {
+			w.WriteHeader(400)
+		}
 		b, _ := result.Marshal()
 		w.Write(b)
 		return
