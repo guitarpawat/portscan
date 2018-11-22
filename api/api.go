@@ -58,7 +58,7 @@ func PutNewScanRequest(b []byte) model.Json {
 		return model.MakeError(err)
 	}
 
-	//sem := make(chan struct{}, limit)
+	sem := make(chan struct{}, limit)
 	registerToken(token)
 
 	for i := 0; i < len(input.Targets); i++ {
@@ -71,11 +71,11 @@ func PutNewScanRequest(b []byte) model.Json {
 		kill := make(chan struct{}, 1)
 		registerChan(token, kill)
 		go func(sem, kill chan struct{}, host, ip string, ports ...int) {
-			//sem <- struct{}{}
-			//defer func() { <-sem }()
+			sem <- struct{}{}
+			defer func() { <-sem }()
 			open := scanner.GetOpenPorts(ip, kill, ports...)
 			cache.UpdateTokenInfo(token, model.MakeResult(host, ip, open...))
-		}(nil, kill, host[i], ip[i], input.Targets[i].Ports...)
+		}(sem, kill, host[i], ip[i], input.Targets[i].Ports...)
 	}
 
 	return &model.ScanOutput{
