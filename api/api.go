@@ -15,7 +15,7 @@ func init() {
 	go func() {
 		for {
 			time.Sleep(3 * time.Minute)
-			log.Println("BATCH:", "killing timeout jobs")
+			log.Println("BATCH:\t", "killing timeout jobs")
 			go killTimeoutBatch()
 		}
 	}()
@@ -34,7 +34,7 @@ func PutNewScanRequest(b []byte) model.Json {
 	ip := make([]string, len(input.Targets))
 	host := make([]string, len(input.Targets))
 
-	log.Println("PUT:", token)
+	log.Println("PUT:\t", token)
 
 	for i, t := range input.Targets {
 		if scanner.IsV4(t.Address) {
@@ -114,7 +114,7 @@ func KillScanRequest(b []byte) model.Json {
 		return model.MakeError(err)
 	}
 
-	log.Println("DELETE:", in.Token)
+	log.Println("DELETE:\t", in.Token)
 
 	revokeChan(in.Token)
 
