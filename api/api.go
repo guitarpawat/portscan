@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-const limit = 8
+const limit = 2048
 
 func init() {
 	go func() {
