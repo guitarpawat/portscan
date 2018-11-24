@@ -60,7 +60,7 @@ func CloseDB() error {
 		return err
 	}
 
-	log.Println("cleared cache")
+	log.Println("EXIT:", "cleared jobs cache")
 	return nil
 }
 

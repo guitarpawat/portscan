@@ -11,7 +11,6 @@ $(() => {
     const response = await axios.delete('http://localhost/api/token/' + token)
     clearInterval(refreshIntervalId)
     unLoadTrigger()
-    alert('cancel')
   })
 
   $('#inputPorts').keypress(async e => {
@@ -166,6 +165,9 @@ getWantedPorts = ports => {
 
 async function addElement(host) {
   if (host.ports.length >= 1) {
+    if(host.host === undefined) {
+      host.host = "<UNKNOWN>"
+    }
     host.ports.forEach(port => {
       $('#results').append(` 
         <div class="row">

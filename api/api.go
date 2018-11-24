@@ -5,6 +5,7 @@ import (
 	"github.com/guitarpawat/portscan/api/cache"
 	"github.com/guitarpawat/portscan/api/model"
 	"github.com/guitarpawat/portscan/scanner"
+	"log"
 	"time"
 )
 
@@ -14,6 +15,7 @@ func init() {
 	go func() {
 		for {
 			time.Sleep(3 * time.Minute)
+			log.Println("BATCH:", "killing timeout jobs")
 			go killTimeoutBatch()
 		}
 	}()
@@ -31,6 +33,8 @@ func PutNewScanRequest(b []byte) model.Json {
 	token := sid.Id()
 	ip := make([]string, len(input.Targets))
 	host := make([]string, len(input.Targets))
+
+	log.Println("PUT:", token)
 
 	for i, t := range input.Targets {
 		if scanner.IsV4(t.Address) {
@@ -109,6 +113,8 @@ func KillScanRequest(b []byte) model.Json {
 	if err != nil {
 		return model.MakeError(err)
 	}
+
+	log.Println("DELETE:", in.Token)
 
 	revokeChan(in.Token)
 
