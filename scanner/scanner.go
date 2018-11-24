@@ -9,8 +9,8 @@ import (
 	"time"
 )
 
-const timeout = time.Millisecond * 1000
-const limit = 32
+const timeout = time.Millisecond * 750
+const limit = 64
 
 // IsV4 checks if input is IPv4 or not
 func IsV4(s string) bool {

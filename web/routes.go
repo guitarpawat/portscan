@@ -16,6 +16,9 @@ func ListenAndServe(serve string) error {
 	r.HandleFunc("/api/token/{token}", handleGetTokenUpdate).Methods("GET")
 	r.HandleFunc("/api/token/{token}", handleDeleteToken).Methods("DELETE")
 
+	fs := http.StripPrefix("/", http.FileServer(http.Dir("static")))
+	r.PathPrefix("/").Handler(fs)
+
 	return http.ListenAndServe(serve, r)
 }
 

@@ -1,0 +1,24 @@
+html {
+  font-family: 'Noto Serif', serif;
+}
+.myNavbar {
+  display: block;
+  position: sticky;
+  widows: 100%;
+  background-color: black;
+  color: whitesmoke;
+  padding: 1em;
+  font-size: 30px;
+}
+
+.loading {
+  height: 150px;
+  display: none;
+  margin-left: auto;
+  margin-right: auto;
+  width: 150px;
+}
+.boxsizingBorder {
+  height: 300px;
+  overflow-y: auto;
+}
