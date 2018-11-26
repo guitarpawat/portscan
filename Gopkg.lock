@@ -26,6 +26,14 @@
   version = "v1.6.2"
 
 [[projects]]
+  branch = "master"
+  digest = "1:635ac9478e783f09b2945663e359ebf74bc225b37f9845795d1b247285b458a2"
+  name = "github.com/pkg/browser"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "0a3d74bf9ce488f035cf5bc36f753a711bc74334"
+
+[[projects]]
   digest = "1:c28625428387b63dd7154eb857f51e700465cfbf7c06f619e71f2da33cefe47e"
   name = "go.etcd.io/bbolt"
   packages = ["."]
@@ -47,6 +55,7 @@
   input-imports = [
     "github.com/chilts/sid",
     "github.com/gorilla/mux",
+    "github.com/pkg/browser",
     "go.etcd.io/bbolt",
   ]
   solver-name = "gps-cdcl"
