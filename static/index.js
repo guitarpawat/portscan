@@ -165,8 +165,8 @@ getWantedPorts = ports => {
 
 async function addElement(host) {
   if (host.ports.length >= 1) {
-    if(host.host === undefined) {
-      host.host = "<UNKNOWN>"
+    if (host.host === undefined) {
+      host.host = '<UNKNOWN>'
     }
     host.ports.forEach(port => {
       $('#results').append(` 
