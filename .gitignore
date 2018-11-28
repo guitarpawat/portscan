@@ -32,4 +32,5 @@ vendor/
 wsp-ecommerce
 
 # BoldDB
-.db
+*.db
+*.db.lock
